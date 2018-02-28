@@ -22,7 +22,7 @@ async function create({ title, text, datetime } = {}) {
  * @returns {Promise} Promise representing an array of all note objects
  */
 async function readAll() {
-  /* todo útfæra */
+  'SELECT * FROM notes'
 }
 
 /**
@@ -33,7 +33,7 @@ async function readAll() {
  * @returns {Promise} Promise representing the note object or null if not found
  */
 async function readOne(id) {
-  /* todo útfæra */
+  'SELECT * FROM notes WHERE id = $1';
 }
 
 /**
