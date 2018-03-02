@@ -6,7 +6,6 @@ const bcrypt = require('bcrypt');
 const { Client } = require('pg');
 const connectionString = 'postgres://notandi:@localhost/v3';
 
-const data = [];
 
 
 async function query(q, values = []) {
@@ -100,7 +99,9 @@ async function readOne(id) {
  * @returns {Promise} Promise representing the object result of creating the note
  */
 async function update(id, { title, text, datetime } = {}) {
-  /* todo útfæra */
+  const q = 'UPDATE notes SET (title,text,datetime) = ($2, $3, $4) WHERE id = $1';
+  const result = await query(q, [id, title,text,datetime]);
+  return result.rows[0];
 }
 
 /**

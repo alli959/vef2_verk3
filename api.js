@@ -47,40 +47,58 @@ router.post('/', async (req, res) => {
       error: 'Title must be a non-empty string',
     });
   }
-  if(note.text.length === 0){
+
+  if (typeof note.text != 'string'){
     return res.status(400).json({
-      field: 'title',
-      error: 'Title must be a non-empty string',
+      field: 'text',
+      error: 'Text must be a string',
     });
   }
   if(note.datetime.length === 0){
     return res.status(400).json({
-      field: 'title',
-      error: 'Title must be a non-empty string',
+      field: 'datetime',
+      error: 'Datetime must be a ISO 8601 date',
     });
   }
 
 
   const item = {title: title, text: text, datetime: datetime};
   
-  return res.status(201).json(item);
+  if(item){
+    return res.status(201).json(item);
+  }
+  res.status(404).json({error: 'Not found'}); 
 });
 
 
-router.put('/:id', (req, res) => {
+router.put('/:id', async (req, res) => {
   const { id } = req.params;
-  create( { title: '', text: '', datetime: ''}) = req.body;
+  const {title, text, datetime } = req.body;
+  const note = await update({ title, text, datetime });
 
-  if(title.length === 0){
+  if(note.title.length === 0){
     return res.status(400).json({
       field: 'title',
       error: 'Title must be a non-empty string',
     });
   }
-  const item = data.find(i => i.id === parseInt(id, 10));
+  if (typeof note.text != 'string'){
+    return res.status(400).json({
+      field: 'text',
+      error: 'Text must be a string',
+    });
+  }
+  if(note.datetime.length === 0){
+    return res.status(400).json({
+      field: 'datetime',
+      error: 'Datetime must be a ISO 8601 date',
+    });
+  }
+
+
+  const item = {title: title, text: text, datetime: datetime};
 
   if(item) {
-    item.title = title;
     return res.status(200).json(item);
   }
 
@@ -88,10 +106,12 @@ router.put('/:id', (req, res) => {
 
 });
 
-router.delete('/:id', (req, res) => {
-  const { id } = req.params;
+router.delete('/:id', async (req, res) => {
+  const { Pid } = req.params;
+  const {id} = req.body;
+  const note = await del({id});
   
-  const item = data.find(i => i.id === parseInt(id, 10));
+  const item = {id: Pid};
 
   if(item){
     data.splice(data.indexOf(item), 1);
