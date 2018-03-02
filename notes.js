@@ -4,7 +4,9 @@ require('dotenv').config();
 
 const bcrypt = require('bcrypt');
 const { Client } = require('pg');
-const connectionString = process.env.DATABASE_URL;
+const connectionString = 'postgres://notandi:@localhost/v3';
+
+const data = [];
 
 
 async function query(q, values = []) {
@@ -14,13 +16,24 @@ async function query(q, values = []) {
 
   let result;
 
+  if(values == null){
   try {
-    result = await client.query(q, values);
-  } catch (err) {
+    result = await client.query(q);
+  }catch (err){
     throw err;
-  } finally {
+  } finally{
     await client.end();
   }
+}
+  else{
+    try {
+      result = await client.query(q, values);
+      }catch (err){
+        throw err;
+      } finally{
+        await client.end();
+      }
+    }
 
   try{
   return result;
@@ -28,6 +41,9 @@ async function query(q, values = []) {
     throw err;
   }
 }
+
+
+
 
 /**
  * Create a note asynchronously.
@@ -40,9 +56,9 @@ async function query(q, values = []) {
  * @returns {Promise} Promise representing the object result of creating the note
  */
 async function create({ title, text, datetime } = {}) {
+  
   const q = 'INSERT INTO notes (title, text, datetime) VALUES ($1, $2, $3) RETURNING *'
   const result = await query(q, [title, text, datetime]);
-  console.log(result);
   return result.rows[0];
 }
 
@@ -52,6 +68,10 @@ async function create({ title, text, datetime } = {}) {
  * @returns {Promise} Promise representing an array of all note objects
  */
 async function readAll() {
+  const q = 'SELECT * FROM notes';
+  const result = await query(q, null); 
+  return result.rows;
+
 }
 
 /**
@@ -62,7 +82,10 @@ async function readAll() {
  * @returns {Promise} Promise representing the note object or null if not found
  */
 async function readOne(id) {
-  'SELECT * FROM notes WHERE id = $1';
+
+  const q = 'SELECT * FROM notes WHERE id = $1';
+  const result = await query(q, [id]);
+  return result.rows[0];
 }
 
 /**

@@ -1,6 +1,7 @@
 const express = require('express');
 
 const {
+  nextId,
   create,
   readAll,
   readOne,
@@ -17,14 +18,16 @@ function catchErrors(fn) {
 
 const data = [];
 
-router.get('/', (req, res) => {
-  res.json(data);
+router.get('/', async (req, res) => {
+  const { id, title, text, datetime } = req.body;
+  const read = await readAll();
+  res.json(read);
 });
 
-router.get('/:id', (req, res) => {
+router.get('/:id', async (req, res) => {
   const { id } = req.params;
 
-  const item = readOne(id);
+  const item = await readOne(id);
 
   if(item) {
     return res.json(item);
@@ -32,18 +35,12 @@ router.get('/:id', (req, res) => {
   res.status(404).json({error: 'Not found'});
 });
 
-router.post('/', (req, res) => {
-  const item = { id: '1', title: 'hello', datetime: 'this'};
-  data.push(item);
-  return res.status(201).json(item);
-});
 
 
-/*router.post('/', (req, res) => {
-  const note =  create(req.body);
-  console.log(note);
 
-  
+router.post('/', async (req, res) => {
+  const { title, text, datetime } = req.body;
+  const note = await create({ title, text, datetime });
   if(note.title.length === 0){
     return res.status(400).json({
       field: 'title',
@@ -63,13 +60,12 @@ router.post('/', (req, res) => {
     });
   }
 
-  const nextId = data.map(i => i.id).reduce((a, b) => a > b ? a : b + 1, 1);
 
-  const item = { id: nextid, title: title, datetime: datetime};
-  data.push(item);
-
+  const item = {title: title, text: text, datetime: datetime};
+  
   return res.status(201).json(item);
-});*/
+});
+
 
 router.put('/:id', (req, res) => {
   const { id } = req.params;
