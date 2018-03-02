@@ -30,6 +30,8 @@ async function query(q) {
 }
 
 async function create() {
+
+  console.log("here");
   const data = await readFileAsync(schemaFile);
 
   await query(data.toString('utf-8'));

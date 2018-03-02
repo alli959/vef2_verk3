@@ -1,7 +1,7 @@
 {
   "name": "v3",
   "version": "1.0.0",
-  "description": "",
+  "description": "Útfæra skal vefþjónustu sem leyfir að skrifa, lesa, breyta og eyða minnisatriðum.",
   "main": ".eslintrc.js",
   "dependencies": {
     "bcrypt": "^1.0.3",
@@ -27,5 +27,13 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alli959/vef2_verk3.git"
+  },
+  "bugs": {
+    "url": "https://github.com/alli959/vef2_verk3/issues"
+  },
+  "homepage": "https://github.com/alli959/vef2_verk3#readme"
 }

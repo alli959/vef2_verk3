@@ -15,13 +15,10 @@ function catchErrors(fn) {
   return (req, res, next) => fn(req, res, next).catch(next);
 }
 
-const data = [
-   {  id: 1, title: 'Foo' },
-   {  id: 2, title: 'Bar'}
-];
+const data = [];
 
 router.get('/', (req, res) => {
-  res.json(readAll());
+  res.json(data);
 });
 
 router.get('/:id', (req, res) => {
@@ -36,21 +33,30 @@ router.get('/:id', (req, res) => {
 });
 
 router.post('/', (req, res) => {
-  const note = create( title = '', text = '', datetime = '');
+  const item = { id: '1', title: 'hello', datetime: 'this'};
+  data.push(item);
+  return res.status(201).json(item);
+});
 
+
+/*router.post('/', (req, res) => {
+  const note =  create(req.body);
+  console.log(note);
+
+  
   if(note.title.length === 0){
     return res.status(400).json({
       field: 'title',
       error: 'Title must be a non-empty string',
     });
   }
-  if(text.length === 0){
+  if(note.text.length === 0){
     return res.status(400).json({
       field: 'title',
       error: 'Title must be a non-empty string',
     });
   }
-  if(datetime.length === 0){
+  if(note.datetime.length === 0){
     return res.status(400).json({
       field: 'title',
       error: 'Title must be a non-empty string',
@@ -63,7 +69,7 @@ router.post('/', (req, res) => {
   data.push(item);
 
   return res.status(201).json(item);
-});
+});*/
 
 router.put('/:id', (req, res) => {
   const { id } = req.params;

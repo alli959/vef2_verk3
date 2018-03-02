@@ -1,5 +1,7 @@
 /* todo sækja pakka sem vantar  */
 
+require('dotenv').config();
+
 const bcrypt = require('bcrypt');
 const { Client } = require('pg');
 const connectionString = process.env.DATABASE_URL;
@@ -8,6 +10,7 @@ const connectionString = process.env.DATABASE_URL;
 async function query(q, values = []) {
   const client = new Client({ connectionString });
   await client.connect();
+  console.log('done');
 
   let result;
 
@@ -19,7 +22,11 @@ async function query(q, values = []) {
     await client.end();
   }
 
+  try{
   return result;
+  }catch (err){
+    throw err;
+  }
 }
 
 /**
